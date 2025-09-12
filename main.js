@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
-const connectDB=require("./datebase/db")
+const connectDB = require("./datebase/db");
 connectDB();
-app.listen(30000,()=>console.log("server is started"));
+const router = require("./router");
+app.use("/librouter", router);
+app.listen(30000, () => console.log("server is started"));
