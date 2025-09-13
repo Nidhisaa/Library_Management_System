@@ -1,7 +1,10 @@
 const express = require("express");
 const app = express();
-const connectDB = require("./datebase/db");
+const connectDB = require("./database/db");
 connectDB();
+app.use(express.json());
 const router = require("./router");
 app.use("/librouter", router);
-app.listen(30000, () => console.log("server is started"));
+const PORT = 3000;
+app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+

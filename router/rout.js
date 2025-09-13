@@ -1,20 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const control = require("../controller/control");
-router.get("/", control.getall);
 
-module.exports = router;
-const express = require("express");
-const router = express.Router();
-const controll = require("../controller/control");
+router.get("/", control.GetAll);
+router.get("/get/name/:name", control.GetByName);
+router.get("/get/id/:id", control.GetById);
+router.get("/sort/author/:author", control.SortByAuthor);
+router.get("/sort/date/:order", control.SortByDate);
+router.post("/add", control.AddBook);
+router.delete("/delete/:id", control.DeleteById);
+router.delete("/delete/name/:name", control.DeleteByName);
+router.put("/update/:id", control.UpdateById);
 
-router.get("/", controll.GetAll);
-router.get("/get/name/:name", controll.GetByName);
-router.get("/get/id/:id", controll.GetById);
-router.get("/sort/author/:author", controll.SortByAuthor);
-router.get("/sort/date/:order", controll.SortByDate);
-router.post("/add", controll.AddBook);
-router.delete("/delete/:id", controll.DeleteBook);
-router.delete("/delete/name/:name", controll.DeleteByName);
-router.put("/update/:id", controll.update);
 module.exports = router;
