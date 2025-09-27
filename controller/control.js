@@ -1,4 +1,5 @@
 const LIB = require("../models/schema");
+require("dotenv").config();
 module.exports = {
   GetAll: async (req, res) => {
     try {
@@ -16,17 +17,17 @@ module.exports = {
   GetByName: async (req, res) => {
     try {
       const name = req.params.name;
-      const book = await LIB.find({ name: name });
-       if (books.length > 0) {
-      res.status(200).send(books); 
-     } else {
-      res.status(404).send("Book not found");
-    }
+      const book = await LIB.findOne({ name: name });
+
+      if (book) {
+        res.status(200).send(book);
+      } else {
+        res.status(404).send("Book not found");
+      }
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
   },
-
 
   GetById: async (req, res) => {
     try {
@@ -131,7 +132,36 @@ module.exports = {
       res.status(500).send({ error: error.message });
     }
   },
+  GetBooksRange: async (req, res) => {
+    try {
+      const start = req.params.start;
+      const end = req.params.end;
+      const skipCount = start - 1;
+      const limitCount = end - start + 1;
+
+      const books = await LIB.find().skip(skipCount).limit(limitCount);
+      res.status(200).send(books);
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
+  },
+  GetAuth: async (req, res) => {
+    const id = req.body.id;
+    const author = req.body.author;
+    console.log(id, author);
+    const user = Lib.findOne({ id: id });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    try {
+      const token = jwt.sign(
+        { id: user.id, author: user.author },
+        process.env.JWT_SECRET, // or a hardcoded secret
+        { expiresIn: "1h" }
+      );
+      res.status(200).json({ token });
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
+  },
 };
-
-
-
