@@ -150,7 +150,7 @@ module.exports = {
     const id = req.body.id;
     const author = req.body.author;
     console.log(id, author);
-    const user = Lib.findOne({ id: id });
+    const user = LIB.findOne({ id: id });
     if (!user) {
       return res.status(404).send("User not found");
     }
