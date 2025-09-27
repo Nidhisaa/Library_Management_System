@@ -16,9 +16,12 @@ module.exports = {
   GetByName: async (req, res) => {
     try {
       const name = req.params.name;
-      const book = await LIB.findOne({ name: name });
-      if (book) res.status(200).send(book);
-      else res.status(404).send("Book not found");
+      const book = await LIB.find({ name: name });
+       if (books.length > 0) {
+      res.status(200).send(books); 
+     } else {
+      res.status(404).send("Book not found");
+    }
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
@@ -92,7 +95,7 @@ module.exports = {
   DeleteById: async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const result = await LIB.deleteOne({ id: id });
+      const result = await LIB.deleteMany({ id: id });
 
       if (result.deletedCount > 0) res.status(200).send(result);
       else res.status(404).send("Book not found");
