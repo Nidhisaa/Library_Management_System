@@ -13,5 +13,6 @@ router.delete("/delete/:id", control.DeleteById);
 router.delete("/delete/name/:name", control.DeleteByName);
 router.put("/update/:id", control.UpdateById);
 router.get("/books/range/:start/:end", control.GetBooksRange);
+router.post("/auth", control.GetAuth);
 
 module.exports = router;
