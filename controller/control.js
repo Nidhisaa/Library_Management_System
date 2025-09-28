@@ -18,8 +18,9 @@ module.exports = {
   GetByName: async (req, res) => {
     try {
       const name = req.params.name;
-      const book = await LIB.findOne({ name: name });
-
+      const getbook = await LIB.find({
+        name: { $regex: new RegExp(name, "i") },
+      });
       if (book) {
         res.status(200).send(book);
       } else {
