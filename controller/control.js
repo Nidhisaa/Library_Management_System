@@ -42,6 +42,20 @@ module.exports = {
     }
   },
 
+   GetBooksRange: async (req, res) => {
+    try {
+      const start = req.params.start;
+      const end = req.params.end;
+      const skipCount = start - 1;
+      const limitCount = end - start + 1;
+
+      const books = await LIB.find().skip(skipCount).limit(limitCount);
+      res.status(200).send(books);
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
+  },
+
   SortByAuthor: async (req, res) => {
     try {
       const author = req.params.author;
@@ -95,6 +109,26 @@ module.exports = {
     }
   },
 
+   GetAuth: async (req, res) => {
+    const id = req.body.id;
+    const author = req.body.author;
+    console.log(id, author);
+    const user = await LIB.findOne({ id: id });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    try {
+      const token = jwt.sign(
+        { id: user.id, author: user.author },
+        process.env.JWT_SECRET, // or a hardcoded secret
+        { expiresIn: "1h" }
+      );
+      res.status(200).json({ token });
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
+  },
+
   DeleteById: async (req, res) => {
     try {
       const id = parseInt(req.params.id);
@@ -134,36 +168,5 @@ module.exports = {
       res.status(500).send({ error: error.message });
     }
   },
-  GetBooksRange: async (req, res) => {
-    try {
-      const start = req.params.start;
-      const end = req.params.end;
-      const skipCount = start - 1;
-      const limitCount = end - start + 1;
-
-      const books = await LIB.find().skip(skipCount).limit(limitCount);
-      res.status(200).send(books);
-    } catch (error) {
-      res.status(500).send({ error: error.message });
-    }
-  },
-  GetAuth: async (req, res) => {
-    const id = req.body.id;
-    const author = req.body.author;
-    console.log(id, author);
-    const user = LIB.findOne({ id: id });
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-    try {
-      const token = jwt.sign(
-        { id: user.id, author: user.author },
-        process.env.JWT_SECRET, // or a hardcoded secret
-        { expiresIn: "1h" }
-      );
-      res.status(200).json({ token });
-    } catch (error) {
-      res.status(500).send({ error: error.message });
-    }
-  },
+ 
 };
